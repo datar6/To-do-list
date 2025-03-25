@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 
 export default function ToDoList() {
-  const [tasks, setTask] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<{ task: string[]; completed: boolean }[]>([]);
   const [newTask, setNewTask] = useState<string>('');
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = event => {
@@ -11,14 +11,14 @@ export default function ToDoList() {
 
   function addTask() {
     if (newTask.trim() !== '') {
-      setTask(t => [...t, newTask]);
+      setTasks(t => [...t, { task: newTask, completed: false }]);
       setNewTask('');
     }
   }
 
   function deleteTask(index: number) {
     const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTask(updatedTasks);
+    setTasks(updatedTasks);
   }
 
   function moveTaskUp(index: number) {
@@ -28,7 +28,7 @@ export default function ToDoList() {
         updatedTasks[index - 1],
         updatedTasks[index],
       ];
-      setTask(updatedTasks);
+      setTasks(updatedTasks);
     }
   }
 
@@ -39,8 +39,19 @@ export default function ToDoList() {
         updatedTasks[index + 1],
         updatedTasks[index],
       ];
-      setTask(updatedTasks);
+      setTasks(updatedTasks);
     }
+  }
+
+  function handleTaskAchieve(index: number) {
+    if (index < 0 || index >= tasks.length) return; // Проверка границ
+
+    const updatedTasks = [...tasks];
+    const [task] = updatedTasks.splice(index, 1); // Вырезаем задачу
+    task.completed = !task.completed; // Переключаем статус
+    updatedTasks.push(task); // Добавляем в конец списка
+
+    setTasks(updatedTasks); // Обновляем состояние
   }
 
   return (
@@ -60,7 +71,12 @@ export default function ToDoList() {
       <ol>
         {tasks.map((task, index) => (
           <li key={index}>
-            <span className="text">{task}</span>
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => handleTaskAchieve(index)}
+            />
+            <span className={`text ${task.completed ? 'completed' : ''}`}>{task.task}</span>
             <button className="delete-button" onClick={() => deleteTask(index)}>
               Delete
             </button>

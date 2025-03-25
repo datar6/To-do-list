@@ -98,4 +98,32 @@ li:hover {
   top: 0;
   background-color: hsl(0, 0%, 10%); /* Цвет фона, чтобы не перекрывался */
   padding: 10px;
+  z-index: 1;
+}
+
+input[type='checkbox'] {
+  width: 25px;
+  height: 25px;
+  appearance: none;
+  border: 2px solid black;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  left: -10px;
+}
+
+input[type='checkbox']:checked {
+  background-color: hsl(125, 47%, 54%);
+  border-color: hsl(125, 47%, 54%);
+}
+
+input[type='checkbox']:checked::after {
+  content: '✔';
+  color: white;
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
