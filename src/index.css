@@ -60,7 +60,7 @@ ol {
 li {
   font-size: 2rem;
   font-weight: bold;
-  padding: 50px;
+  padding: 20px;
   background-color: hsl(0, 0%, 97%);
   margin-bottom: 10px;
   border: 3px solid hsla(0, 0%, 85%, 0.75);
@@ -126,4 +126,8 @@ input[type='checkbox']:checked::after {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+li:has(input[type='checkbox']:checked) {
+  background-color: palegreen;
 }
