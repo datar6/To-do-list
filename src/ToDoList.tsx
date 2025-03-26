@@ -1,9 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tooltip } from 'react-tooltip';
 
+type Task = {
+  task: string;
+  completed: boolean;
+  originalIndex?: number;
+};
+
 export default function ToDoList() {
-  const [tasks, setTasks] = useState<{ task: string[]; completed: boolean }[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState<string>('');
+
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('tasks');
+
+    if (savedTasks) {
+      setTasks(JSON.parse(savedTasks));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (tasks.length > 0) {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    } else {
+      localStorage.removeItem('tasks');
+    }
+  }, [tasks]);
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = event => {
     setNewTask(event.target.value);
@@ -44,14 +66,22 @@ export default function ToDoList() {
   }
 
   function handleTaskAchieve(index: number) {
-    if (index < 0 || index >= tasks.length) return; // Проверка границ
+    if (index < 0 || index >= tasks.length) return;
 
     const updatedTasks = [...tasks];
     const [task] = updatedTasks.splice(index, 1); // Вырезаем задачу
     task.completed = !task.completed; // Переключаем статус
-    updatedTasks.push(task); // Добавляем в конец списка
 
-    setTasks(updatedTasks); // Обновляем состояние
+    if (task.completed) {
+      task.originalIndex = index; // Сохраняем текущую позицию
+      updatedTasks.push(task); // Перемещаем в конец списка
+    } else {
+      const insertIndex = task.originalIndex ?? updatedTasks.length; // Берем сохранённую позицию
+      updatedTasks.splice(insertIndex, 0, task); // Вставляем обратно
+      delete task.originalIndex; // Удаляем её после возврата
+    }
+
+    setTasks(updatedTasks);
   }
 
   return (
