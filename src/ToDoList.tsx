@@ -86,7 +86,18 @@ export default function ToDoList() {
 
   return (
     <div className="to-do-list">
-      <h1>To-Do-List</h1>
+      <h1 className="bouncing-letters">
+        <span>T</span>
+        <span>o</span>
+        <span>-</span>
+        <span>D</span>
+        <span>o</span>
+        <span>-</span>
+        <span>L</span>
+        <span>i</span>
+        <span>s</span>
+        <span>t</span>
+      </h1>
       <div className="sticky-header">
         <input
           type="text"
