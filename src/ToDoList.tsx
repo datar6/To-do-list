@@ -10,39 +10,60 @@ type Task = {
 export default function ToDoList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
 
+  // Загружаем задачи из localStorage при первом рендере
   useEffect(() => {
     const savedTasks = localStorage.getItem('tasks');
-
     if (savedTasks) {
-      setTasks(JSON.parse(savedTasks));
+      const parsedTasks = JSON.parse(savedTasks);
+      setTasks(parsedTasks);
+      setFilteredTasks(parsedTasks); // Обновляем отфильтрованный список сразу
     }
   }, []);
 
+  // Сохраняем задачи в localStorage при их изменении
   useEffect(() => {
     if (tasks.length > 0) {
       localStorage.setItem('tasks', JSON.stringify(tasks));
     } else {
       localStorage.removeItem('tasks');
     }
+
+    // Обновляем фильтрованный список, если нет активного поиска
+    if (searchTerm === '') {
+      setFilteredTasks(tasks);
+    }
   }, [tasks]);
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = event => {
-    setNewTask(event.target.value);
+  // Функция поиска
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    if (value === '') {
+      setFilteredTasks(tasks);
+    } else {
+      setFilteredTasks(tasks.filter(task => task.task.toLowerCase().includes(value.toLowerCase())));
+    }
   };
 
+  // Добавление новой задачи
   function addTask() {
     if (newTask.trim() !== '') {
-      setTasks(t => [...t, { task: newTask, completed: false }]);
+      const updatedTasks = [...tasks, { task: newTask, completed: false }];
+      setTasks(updatedTasks);
       setNewTask('');
     }
   }
 
+  // Удаление задачи
   function deleteTask(index: number) {
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
   }
 
+  // Перемещение задачи вверх
   function moveTaskUp(index: number) {
     if (index > 0) {
       const updatedTasks = [...tasks];
@@ -54,6 +75,7 @@ export default function ToDoList() {
     }
   }
 
+  // Перемещение задачи вниз
   function moveTaskDown(index: number) {
     if (index < tasks.length - 1) {
       const updatedTasks = [...tasks];
@@ -65,20 +87,21 @@ export default function ToDoList() {
     }
   }
 
+  // Отметка выполнения задачи
   function handleTaskAchieve(index: number) {
     if (index < 0 || index >= tasks.length) return;
 
     const updatedTasks = [...tasks];
-    const [task] = updatedTasks.splice(index, 1); // Вырезаем задачу
-    task.completed = !task.completed; // Переключаем статус
+    const [task] = updatedTasks.splice(index, 1);
+    task.completed = !task.completed;
 
     if (task.completed) {
-      task.originalIndex = index; // Сохраняем текущую позицию
-      updatedTasks.push(task); // Перемещаем в конец списка
+      task.originalIndex = index;
+      updatedTasks.push(task);
     } else {
-      const insertIndex = task.originalIndex ?? updatedTasks.length; // Берем сохранённую позицию
-      updatedTasks.splice(insertIndex, 0, task); // Вставляем обратно
-      delete task.originalIndex; // Удаляем её после возврата
+      const insertIndex = task.originalIndex ?? updatedTasks.length;
+      updatedTasks.splice(insertIndex, 0, task);
+      delete task.originalIndex;
     }
 
     setTasks(updatedTasks);
@@ -86,6 +109,9 @@ export default function ToDoList() {
 
   return (
     <div className="to-do-list">
+      <div>
+        <input type="text" placeholder="Search..." onChange={handleSearch} />
+      </div>
       <h1 className="bouncing-letters">
         <span>T</span>
         <span>o</span>
@@ -103,14 +129,14 @@ export default function ToDoList() {
           type="text"
           placeholder="Enter a task..."
           value={newTask}
-          onChange={handleInputChange}
+          onChange={e => setNewTask(e.target.value)}
         />
         <button className="add-button" onClick={addTask}>
           Add
         </button>
       </div>
       <ol>
-        {tasks.map((task, index) => (
+        {filteredTasks.map((task, index) => (
           <li key={index}>
             <input
               type="checkbox"
