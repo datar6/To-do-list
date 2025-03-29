@@ -1,0 +1,178 @@
+body {
+  background-color: hsl(0, 0%, 10%);
+}
+.to-do-list {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  margin-top: 100px;
+}
+
+h1 {
+  color: white;
+  font-size: 4rem;
+}
+
+.bouncing-letters span {
+  display: inline-block;
+  animation: bounce 1s ease infinite alternate;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(5px);
+  }
+}
+
+.bouncing-letters span:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.bouncing-letters span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.bouncing-letters span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.bouncing-letters span:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.bouncing-letters span:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.bouncing-letters span:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.bouncing-letters span:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.bouncing-letters span:nth-child(8) {
+  animation-delay: 0.8s;
+}
+.bouncing-letters span:nth-child(9) {
+  animation-delay: 0.9s;
+}
+.bouncing-letters span:nth-child(10) {
+  animation-delay: 1s;
+}
+button {
+  font-size: 1.7rem;
+  font-weight: bold;
+  padding: 10px 20px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.35s ease;
+}
+.add-button {
+  background-color: hsl(125, 47%, 54%);
+}
+
+.add-button:hover {
+  background-color: hsl(125, 47%, 44%);
+}
+
+.delete-button {
+  background-color: hsl(10, 90%, 50%);
+}
+
+.delete-button:hover {
+  background-color: hsl(10, 90%, 40%);
+}
+
+.move-button {
+  background-color: hsl(207, 90%, 64%);
+}
+
+.move-button:hover {
+  background-color: hsl(207, 90%, 54%);
+}
+
+input[type='text'] {
+  font-size: 1.6rem;
+  padding: 10px;
+  border: 2px solid hsla(0, 0%, 80%, 0.5);
+  border-radius: 5px;
+  color: hsla(0, 0%, 0%, 0.5);
+}
+
+ol {
+  padding: 0;
+}
+
+li {
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 20px;
+  background-color: hsl(0, 0%, 97%);
+  margin-bottom: 10px;
+  border: 3px solid hsla(0, 0%, 85%, 0.75);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.text {
+  flex: 1;
+}
+
+.delete-button,
+.move-button {
+  padding: 8px 12px;
+  font-size: 1.4rem;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.move-button-disabled {
+  padding: 8px 12px;
+  font-size: 1.4rem;
+  margin-left: 10px;
+  background-color: hsl(0, 0%, 40%);
+}
+
+li:hover {
+  background-color: hsl(0, 9%, 93%);
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: hsl(0, 0%, 10%); /* Цвет фона, чтобы не перекрывался */
+  padding: 10px;
+  z-index: 1;
+}
+
+input[type='checkbox'] {
+  width: 25px;
+  height: 25px;
+  appearance: none;
+  border: 2px solid black;
+  border-radius: 50px;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  left: -10px;
+}
+
+input[type='checkbox']:checked {
+  background-color: hsl(125, 47%, 54%);
+  border-color: hsl(125, 47%, 54%);
+}
+
+input[type='checkbox']:checked::after {
+  content: '✔';
+  color: white;
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+li:has(input[type='checkbox']:checked) {
+  background-color: palegreen;
+}

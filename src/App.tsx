@@ -1,7 +1,8 @@
-import ToDoList from './ToDoList';
+import FirstPage from './pages/first-page';
+// import ToDoList from './to-do-list';
 
 function App() {
-  return <ToDoList />;
+  return <FirstPage />;
 }
 
 export default App;
